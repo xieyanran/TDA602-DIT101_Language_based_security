@@ -2,47 +2,46 @@ import backEnd.*;
 import java.util.Scanner;
 
 public class ShoppingCart {
-    private static void print(Wallet wallet, Pocket pocket) throws Exception {
-        System.out.println("Your current balance is: " + wallet.getBalance() + " credits.");
-        System.out.println(Store.asString());
-        System.out.println("Your current pocket is:\n" + pocket.getPocket());
+  private static void print(Wallet wallet, Pocket pocket) throws Exception {
+    System.out.println("Your current balance is: " + wallet.getBalance() + " credits.");
+    System.out.println(Store.asString());
+    System.out.println("Your current pocket is:\n" + pocket.getPocket());
+  }
+
+  private static String scan(Scanner scanner) throws Exception {
+    System.out.print("What do you want to buy? (type quit to stop) ");
+    return scanner.nextLine();
+  }
+
+  public static void main(String[] args) throws Exception {
+    Wallet wallet = new Wallet();
+    Pocket pocket = new Pocket();
+    Scanner scanner = new Scanner(System.in);
+
+    print(wallet, pocket);
+    String product = scan(scanner);
+
+    while (!product.equals("quit")) {
+      /*
+       * TODO:
+       * - check if the amount of credits is enough, if not stop the execution.
+       * - otherwise, withdraw the price of the product from the wallet.
+       * - add the name of the product to the pocket file.
+       * - print the new balance.
+       */
+      // Check if the amount of credits is enough
+
+      // Withdraw the price from the wallet
+      if (!wallet.safeWithdraw(Store.getProductPrice(product))) {
+        System.out.println("Insufficient funds");
+        break;
+      }
+      // Add the product to the pocket
+      pocket.addProduct(product);
+
+      // Just to print everything again...
+      print(wallet, pocket);
+      product = scan(scanner);
     }
-
-    private static String scan(Scanner scanner) throws Exception {
-        System.out.print("What do you want to buy? (type quit to stop) ");
-        return scanner.nextLine();
-    }
-
-    public static void main(String[] args) throws Exception {
-        Wallet wallet = new Wallet();
-        Pocket pocket = new Pocket();
-        Scanner scanner = new Scanner(System.in);
-
-        print(wallet, pocket);
-        String product = scan(scanner);
-
-        while(!product.equals("quit")) {
-            /* TODO:
-               - check if the amount of credits is enough, if not stop the execution.
-               - otherwise, withdraw the price of the product from the wallet.
-               - add the name of the product to the pocket file.
-               - print the new balance.
-            */
-            // Check if the amount of credits is enough
-            if(wallet.getBalance() < Store.getProductPrice(product)) {
-                System.out.println("You don't have enough credits to buy " + product + ".");
-                break;
-            }
-
-            // Withdraw the price from the wallet
-            wallet.setBalance(wallet.getBalance() - Store.getProductPrice(product));
-
-            // Add the product to the pocket
-            pocket.addProduct(product);
-
-            // Just to print everything again...
-            print(wallet, pocket);
-            product = scan(scanner);
-        }
-    }
+  }
 }
