@@ -34,6 +34,7 @@ public class Wallet {
      * @param  newBalance          new balance to write in the wallet
      */
     public void setBalance(int newBalance) throws Exception {
+    Thread.sleep(10000);
 	this.file.setLength(0);
 	String str = Integer.valueOf(newBalance).toString()+'\n'; 
 	this.file.writeBytes(str); 
